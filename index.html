@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#24150f"><title>蟑螂去死！｜MAIMINE STUDIO</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#24150f;font-family:system-ui,"Noto Sans TC",sans-serif;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+#app{position:relative;width:100%;height:100%;max-width:520px;margin:auto;overflow:hidden;background:#b98558;box-shadow:0 0 30px #0008}
+#cover{position:absolute;inset:0;z-index:10;background:url('images/cover.png') center/100% 100% no-repeat}
+#cover button{position:absolute;border:0;background:transparent;cursor:pointer;color:transparent;-webkit-tap-highlight-color:transparent}
+#start{left:8%;top:75.5%;width:84%;height:10.5%}#record{left:22%;top:87%;width:56%;height:8%}
+#game{display:none;position:absolute;inset:0;overflow:hidden;background:#bb8c64 url('images/floor.png') center top/100% auto repeat-y}
+#hud{position:absolute;z-index:5;top:calc(env(safe-area-inset-top) + 9px);left:13px;right:13px;display:flex;justify-content:space-between;align-items:center;color:#fff8e8;font-weight:1000;font-size:clamp(18px,5vw,25px);text-shadow:2px 3px 0 #28170f,-1px -1px #28170f;pointer-events:none}
+.hudbox{background:#2a170ed9;border:3px solid #fff0d5;border-radius:16px;padding:4px 12px;box-shadow:0 3px 0 #29170e}
+#bugs{position:absolute;inset:0;z-index:2}.roach{position:absolute;width:clamp(86px,25vw,138px);height:auto;cursor:pointer;touch-action:manipulation;filter:drop-shadow(2px 4px 1px #2b170e);transform-origin:center;z-index:2;-webkit-tap-highlight-color:transparent}
+.roach.shake{animation:shake .17s 2}.roach.blood{animation:shake .24s 2;filter:drop-shadow(2px 4px 1px #2b170e) saturate(1.3)}.roach.dead{animation:fall .42s forwards;pointer-events:none}
+@keyframes shake{0%{translate:0 0;rotate:0}20%{translate:-8px 2px;rotate:-8deg}45%{translate:8px -3px;rotate:9deg}70%{translate:-5px 2px;rotate:-5deg}100%{translate:0 0;rotate:0}}
+@keyframes fall{to{transform:rotate(90deg) scale(.8);opacity:.95}}
+#arm{position:absolute;right:-17px;bottom:-36px;width:min(72vw,350px);height:auto;z-index:4;transform-origin:88% 94%;pointer-events:none;transition:transform .12s ease-out;filter:drop-shadow(3px 5px 2px #2b170e)}#arm.swing{transform:rotate(-39deg) translate(-27px,-35px) scale(.95)}
+#flash{position:absolute;inset:0;z-index:6;background:#fff;opacity:0;pointer-events:none}#fly{position:absolute;display:none;z-index:8;width:min(58vw,270px);left:50%;top:48%;transform:translate(-50%,-50%);filter:drop-shadow(4px 6px #170d08)}#fly img{width:100%}
+#overlay{position:absolute;inset:0;z-index:12;display:none;align-items:center;justify-content:center;background:#160d09c9;color:#fff3df;text-align:center;padding:24px}
+#panel{background:#f3d49c;color:#26170e;border:6px solid #26170e;border-radius:28px;padding:24px 20px;box-shadow:0 8px 0 #26170e;width:min(86%,390px);font-weight:1000}
+#panel h1{margin:0 0 8px;font-size:clamp(28px,8vw,38px);line-height:1.1}#panel p{font-size:21px;margin:10px}#panel button{border:5px solid #26170e;border-radius:24px;background:#e82d20;color:white;text-shadow:1px 2px #26170e;padding:12px 26px;font-size:23px;font-weight:1000;margin-top:12px;box-shadow:0 4px 0 #26170e}
+#toast{position:absolute;z-index:9;top:23%;left:50%;transform:translateX(-50%);font-weight:1000;font-size:24px;color:#fff;text-shadow:2px 3px #27150d;opacity:0;pointer-events:none;white-space:nowrap}#toast.show{animation:toast .65s ease-out}@keyframes toast{0%{opacity:0;translate:0 15px;scale:.7}25%{opacity:1;translate:0 0;scale:1.1}80%{opacity:1}100%{opacity:0;translate:0 -24px}}
+#hint{position:absolute;bottom:12px;left:0;right:0;text-align:center;z-index:1;color:#fff7e7;font-size:12px;font-weight:800;text-shadow:1px 2px #26170e;opacity:.85;pointer-events:none}
+@media(min-height:850px){#arm{width:min(68vw,350px)}}
+</style></head><body><main id="app">
+<div id="cover"><button id="start" aria-label="開始遊戲"></button><button id="record" aria-label="最高紀錄"></button></div>
+<section id="game"><div id="hud"><span class="hudbox">🪳 <b id="score">0</b></span><span class="hudbox">⏱ <b id="time">20</b></span></div><div id="bugs"></div><img id="arm" src="images/arm.png" alt="拖鞋手臂"><div id="flash"></div><div id="fly"><img src="images/flying_roach.png" alt="飛蟑螂"></div><div id="toast"></div><div id="hint">點擊蟑螂！連續擊打直到牠倒下</div></section>
+<div id="overlay"><div id="panel"><h1 id="resultTitle">時間到！</h1><p>擊殺：<span id="finalScore">0</span></p><p>最高紀錄：<span id="best">0</span></p><button id="again">再玩一次</button></div></div>
+</main><script>
+const $=s=>document.querySelector(s),cover=$('#cover'),game=$('#game'),bugs=$('#bugs'),arm=$('#arm'),overlay=$('#overlay'),flash=$('#flash'),fly=$('#fly');
+let score=0,time=20,best=Number(localStorage.getItem('roachBest')||0),playing=false,timer=null,spawnTimer=null,bossTimer=null,flyInterval=null,boss=false,spawnCount=0;
+const rand=(a,b)=>a+Math.random()*(b-a);
+$('#record').addEventListener('click',()=>alert('最高紀錄：'+best+' 隻'));
+$('#start').addEventListener('click',start);$('#again').addEventListener('click',start);
+function start(){clearAll();score=0;time=20;playing=true;boss=false;spawnCount=0;$('#score').textContent='0';$('#time').textContent='20';$('#best').textContent=best;bugs.innerHTML='';overlay.style.display='none';cover.style.display='none';game.style.display='block';arm.style.transform='';spawn();spawnTimer=setInterval(spawn,760);timer=setInterval(()=>{time--;$('#time').textContent=time;if(time<=0)end(false)},1000);bossTimer=setTimeout(triggerFly,11500)}
+function clearAll(){clearInterval(timer);clearInterval(spawnTimer);clearTimeout(bossTimer);clearInterval(flyInterval);timer=spawnTimer=bossTimer=flyInterval=null}
+function spawn(){if(!playing||boss||bugs.children.length>=6)return;spawnCount++;let n=1+Math.floor(Math.random()*4),hp=3,el=document.createElement('img');el.src=`images/roach${n}.png`;el.className='roach';el.dataset.n=n;el.dataset.hp=hp;el.dataset.hit='0';let w=game.clientWidth,h=game.clientHeight;el.style.width=rand(88,132)+'px';el.style.left=rand(5,Math.max(8,w-145))+'px';el.style.top=rand(76,Math.max(100,h-210))+'px';el.style.rotate=rand(-22,22)+'deg';el.addEventListener('pointerdown',e=>{e.preventDefault();hit(el,e)});bugs.appendChild(el);wander(el)}
+function wander(el){let t=setInterval(()=>{if(!playing||!el.isConnected||el.classList.contains('dead')){clearInterval(t);return}let x=parseFloat(el.style.left)||0,y=parseFloat(el.style.top)||0;el.style.left=Math.max(3,Math.min(game.clientWidth-100,x+rand(-24,24)))+'px';el.style.top=Math.max(70,Math.min(game.clientHeight-155,y+rand(-19,19)))+'px';el.style.rotate=rand(-30,30)+'deg'},650+Math.random()*350)}
+function hit(el,e){if(!playing||el.classList.contains('dead'))return;const rect=game.getBoundingClientRect(),x=e.clientX-rect.left,y=e.clientY-rect.top;arm.classList.remove('swing');void arm.offsetWidth;arm.classList.add('swing');setTimeout(()=>arm.classList.remove('swing'),145);flash.style.opacity='.28';setTimeout(()=>flash.style.opacity='0',55);let hits=Number(el.dataset.hit)+1;el.dataset.hit=hits;let hp=Number(el.dataset.hp);el.classList.remove('shake','blood');void el.offsetWidth;if(hits===1){el.classList.add('shake');toast('啪！')}else if(hits<hp){el.src='images/reaction2.png';el.classList.add('blood');toast('中獎！')}else{el.src='images/reaction3.png';el.classList.add('dead');score++;$('#score').textContent=score;toast('擊殺 +1');if(score>best){best=score;localStorage.setItem('roachBest',best)}setTimeout(()=>el.remove(),470)}
+if(hits===1){setTimeout(()=>{if(el.isConnected&&!el.classList.contains('dead'))el.src='images/reaction1.png'},80)}else if(hits<hp){setTimeout(()=>{if(el.isConnected&&!el.classList.contains('dead'))el.src=`images/roach${el.dataset.n}.png`},520)} }
+function toast(s){let t=$('#toast');t.textContent=s;t.classList.remove('show');void t.offsetWidth;t.classList.add('show')}
+function triggerFly(){if(!playing)return;boss=true;clearInterval(spawnTimer);bugs.innerHTML='';fly.style.display='block';let scale=1;flyInterval=setInterval(()=>{scale+=.14;fly.style.transform=`translate(-50%,-50%) scale(${scale}) rotate(${rand(-5,5)}deg)`;if(scale>5.4){clearInterval(flyInterval);end(true)}},100)}
+function end(flew){if(!playing)return;playing=false;clearAll();fly.style.display='none';if(score>best){best=score;localStorage.setItem('roachBest',best)}$('#resultTitle').textContent=flew?'飛蟑螂突襲！':'時間到！';$('#finalScore').textContent=score;$('#best').textContent=best;overlay.style.display='flex'}
+</script></body></html>
