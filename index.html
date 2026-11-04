@@ -7,23 +7,126 @@
 <title>蟑螂去死！｜MAIMINE STUDIO</title>
 
 <style>
-*{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#24150f;font-family:system-ui,"Noto Sans TC",sans-serif;touch-action:manipulation;user-select:none;-webkit-user-select:none}
-#app{position:relative;width:100%;height:100%;max-width:520px;margin:auto;overflow:hidden;background:#b98558;box-shadow:0 0 30px #0008}
-#cover{position:absolute;inset:0;z-index:10;background:url('images/cover.png') center/100% 100% no-repeat}
-#cover button{position:absolute;border:0;background:transparent;cursor:pointer;color:transparent;-webkit-tap-highlight-color:transparent}
-#start{left:8%;top:75.5%;width:84%;height:10.5%}
-#record{left:22%;top:87%;width:56%;height:8%}
+*{
+box-sizing:border-box
+}
 
-#game{display:none;position:absolute;inset:0;overflow:hidden;background:#bb8c64 url('images/floor_long.png') center top/100% auto no-repeat}
-#hud{position:absolute;z-index:5;top:calc(env(safe-area-inset-top) + 9px);left:13px;right:13px;display:flex;justify-content:space-between;align-items:center;color:#fff8e8;font-weight:1000;font-size:clamp(18px,5vw,25px);text-shadow:2px 3px 0 #28170f,-1px -1px #28170f;pointer-events:none}
-.hudbox{background:#2a170ed9;border:3px solid #fff0d5;border-radius:16px;padding:4px 12px;box-shadow:0 3px 0 #29170e}
+html,body{
+margin:0;
+width:100%;
+height:100%;
+overflow:hidden;
+background:#24150f;
+font-family:system-ui,"Noto Sans TC",sans-serif;
+touch-action:manipulation;
+user-select:none;
+-webkit-user-select:none
+}
 
-#bugs{position:absolute;inset:0;z-index:2}
-.roach{position:absolute;width:clamp(86px,25vw,138px);height:auto;cursor:pointer;touch-action:manipulation;filter:none;transform-origin:center;z-index:2;-webkit-tap-highlight-color:transparent}
-.roach.shake{animation:shake .17s 2}
-.roach.blood{animation:shake .24s 2;filter:saturate(1.3)}
-.roach.dead{animation:fall .42s forwards;pointer-events:none}
+#app{
+position:relative;
+width:100%;
+height:100%;
+max-width:520px;
+margin:auto;
+overflow:hidden;
+background:#b98558;
+box-shadow:0 0 30px #0008
+}
+
+#cover{
+position:absolute;
+inset:0;
+z-index:10;
+background:url('images/cover.png') center/100% 100% no-repeat
+}
+
+#cover button{
+position:absolute;
+border:0;
+background:transparent;
+cursor:pointer;
+color:transparent;
+-webkit-tap-highlight-color:transparent
+}
+
+#start{
+left:8%;
+top:75.5%;
+width:84%;
+height:10.5%
+}
+
+#record{
+left:22%;
+top:87%;
+width:56%;
+height:8%
+}
+
+#game{
+display:none;
+position:absolute;
+inset:0;
+overflow:hidden;
+background:#bb8c64 url('images/floor_long.png') center top/100% auto no-repeat
+}
+
+#hud{
+position:absolute;
+z-index:5;
+top:calc(env(safe-area-inset-top) + 9px);
+left:13px;
+right:13px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+color:#fff8e8;
+font-weight:1000;
+font-size:clamp(18px,5vw,25px);
+text-shadow:2px 3px 0 #28170f,-1px -1px #28170f;
+pointer-events:none
+}
+
+.hudbox{
+background:#2a170ed9;
+border:3px solid #fff0d5;
+border-radius:16px;
+padding:4px 12px;
+box-shadow:0 3px 0 #29170e
+}
+
+#bugs{
+position:absolute;
+inset:0;
+z-index:2
+}
+
+.roach{
+position:absolute;
+width:clamp(86px,25vw,138px);
+height:auto;
+cursor:pointer;
+touch-action:manipulation;
+filter:none;
+transform-origin:center;
+z-index:2;
+-webkit-tap-highlight-color:transparent
+}
+
+.roach.shake{
+animation:shake .17s 2
+}
+
+.roach.blood{
+animation:shake .24s 2;
+filter:saturate(1.3)
+}
+
+.roach.dead{
+animation:fall .42s forwards;
+pointer-events:none
+}
 
 @keyframes shake{
 0%{translate:0 0;rotate:0}
@@ -34,41 +137,166 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#24150f;fon
 }
 
 @keyframes fall{
-to{transform:rotate(90deg) scale(.8);opacity:.95}
+to{
+transform:rotate(90deg) scale(.8);
+opacity:.95
+}
 }
 
-#arm{position:absolute;right:-8px;bottom:-22px;width:min(76vw,380px);height:auto;z-index:4;transform-origin:88% 94%;pointer-events:none;transition:transform .12s ease-out;filter:none}
-#arm.swing{transform:rotate(-39deg) translate(-27px,-35px) scale(.95)}
+#arm{
+position:absolute;
+right:-8px;
+bottom:-22px;
+width:min(76vw,380px);
+height:auto;
+z-index:4;
+transform-origin:88% 94%;
+pointer-events:none;
+transition:transform .12s ease-out;
+filter:none
+}
 
-#flash{position:absolute;inset:0;z-index:6;background:#fff;opacity:0;pointer-events:none}
-#fly{position:absolute;display:none;z-index:8;width:min(58vw,270px);left:50%;top:48%;transform:translate(-50%,-50%) scale(.7);filter:none;animation:flyburst .42s ease-out forwards}
+#arm.swing{
+transform:rotate(-39deg) translate(-27px,-35px) scale(.95)
+}
+
+#flash{
+position:absolute;
+inset:0;
+z-index:6;
+background:#fff;
+opacity:0;
+pointer-events:none
+}
+
+#fly{
+position:absolute;
+display:none;
+z-index:8;
+width:min(58vw,270px);
+left:50%;
+top:48%;
+transform:translate(-50%,-50%) scale(.7);
+filter:none;
+animation:flyburst .42s ease-out forwards
+}
 
 @keyframes flyburst{
-to{transform:translate(-50%,-50%) scale(1.18) rotate(-8deg)}
+to{
+transform:translate(-50%,-50%) scale(1.18) rotate(-8deg)
+}
 }
 
-#fly img{width:100%}
+#fly img{
+width:100%
+}
 
-#overlay{position:absolute;inset:0;z-index:12;display:none;align-items:center;justify-content:center;background:#160d09c9;color:#fff3df;text-align:center;padding:24px}
-#panel{background:#f3d49c;color:#26170e;border:6px solid #26170e;border-radius:28px;padding:24px 20px;box-shadow:0 8px 0 #26170e;width:min(86%,390px);font-weight:1000}
-#panel h1{margin:0 0 8px;font-size:clamp(28px,8vw,38px);line-height:1.1}
-#panel p{font-size:21px;margin:10px}
-#panel button{border:5px solid #26170e;border-radius:24px;background:#e82d20;color:white;text-shadow:1px 2px #26170e;padding:12px 26px;font-size:23px;font-weight:1000;margin-top:12px;box-shadow:0 4px 0 #26170e}
+#overlay{
+position:absolute;
+inset:0;
+z-index:12;
+display:none;
+align-items:center;
+justify-content:center;
+background:#160d09c9;
+color:#fff3df;
+text-align:center;
+padding:24px
+}
 
-#toast{position:absolute;z-index:9;top:23%;left:50%;transform:translateX(-50%);font-weight:1000;font-size:24px;color:#fff;text-shadow:2px 3px #27150d;opacity:0;pointer-events:none;white-space:nowrap}
-#toast.show{animation:toast .65s ease-out}
+#panel{
+background:#f3d49c;
+color:#26170e;
+border:6px solid #26170e;
+border-radius:28px;
+padding:24px 20px;
+box-shadow:0 8px 0 #26170e;
+width:min(86%,390px);
+font-weight:1000
+}
+
+#panel h1{
+margin:0 0 8px;
+font-size:clamp(28px,8vw,38px);
+line-height:1.1
+}
+
+#panel p{
+font-size:21px;
+margin:10px
+}
+
+#panel button{
+border:5px solid #26170e;
+border-radius:24px;
+background:#e82d20;
+color:white;
+text-shadow:1px 2px #26170e;
+padding:12px 26px;
+font-size:23px;
+font-weight:1000;
+margin-top:12px;
+box-shadow:0 4px 0 #26170e
+}
+
+#toast{
+position:absolute;
+z-index:9;
+top:23%;
+left:50%;
+transform:translateX(-50%);
+font-weight:1000;
+font-size:24px;
+color:#fff;
+text-shadow:2px 3px #27150d;
+opacity:0;
+pointer-events:none;
+white-space:nowrap
+}
+
+#toast.show{
+animation:toast .65s ease-out
+}
 
 @keyframes toast{
-0%{opacity:0;translate:0 15px;scale:.7}
-25%{opacity:1;translate:0 0;scale:1.1}
-80%{opacity:1}
-100%{opacity:0;translate:0 -24px}
+0%{
+opacity:0;
+translate:0 15px;
+scale:.7
+}
+25%{
+opacity:1;
+translate:0 0;
+scale:1.1
+}
+80%{
+opacity:1
+}
+100%{
+opacity:0;
+translate:0 -24px
+}
 }
 
-#hint{position:absolute;bottom:12px;left:0;right:0;text-align:center;z-index:1;color:#fff7e7;font-size:12px;font-weight:800;text-shadow:1px 2px #26170e;opacity:.85;pointer-events:none}
+#hint{
+position:absolute;
+bottom:12px;
+left:0;
+right:0;
+text-align:center;
+z-index:1;
+color:#fff7e7;
+font-size:12px;
+font-weight:800;
+text-shadow:1px 2px #26170e;
+opacity:.85;
+pointer-events:none
+}
 
 @media(min-height:850px){
-#arm{width:min(68vw,350px)}
+#arm{
+width:min(68vw,350px)
+}
 }
 </style>
 </head>
@@ -78,15 +306,25 @@ to{transform:translate(-50%,-50%) scale(1.18) rotate(-8deg)}
 <main id="app">
 
 <div id="cover">
+
 <button id="start" aria-label="開始打"></button>
+
 <button id="record" aria-label="最高紀錄"></button>
+
 </div>
 
 <section id="game">
 
 <div id="hud">
-<span class="hudbox">🪳 <b id="score">0</b></span>
-<span class="hudbox">⏱ <b id="time">20</b></span>
+
+<span class="hudbox">
+🪳 <b id="score">0</b>
+</span>
+
+<span class="hudbox">
+⏱ <b id="time">20</b>
+</span>
+
 </div>
 
 <div id="bugs"></div>
@@ -125,6 +363,10 @@ to{transform:translate(-50%,-50%) scale(1.18) rotate(-8deg)}
 
 <script>
 
+/* =========================================
+   DOM
+========================================= */
+
 const $=s=>document.querySelector(s);
 
 const cover=$('#cover');
@@ -135,9 +377,153 @@ const overlay=$('#overlay');
 const flash=$('#flash');
 const fly=$('#fly');
 
+
 /* =========================================
-   蟑螂遊戲專用最高紀錄
-   不再使用其他遊戲的紀錄
+   音效設定
+========================================= */
+
+const MUSIC_PATH='music/';
+
+const sounds={
+
+home:new Audio(MUSIC_PATH+'first.mp3'),
+
+game:new Audio(MUSIC_PATH+'start.mp3'),
+
+punch1:new Audio(MUSIC_PATH+'punch1.mp3'),
+
+punch2:new Audio(MUSIC_PATH+'punch2.mp3'),
+
+punch3:new Audio(MUSIC_PATH+'punch3.mp3'),
+
+over:new Audio(MUSIC_PATH+'over.mp3'),
+
+flyover:new Audio(MUSIC_PATH+'flyover.mp3')
+
+};
+
+
+/* 背景音樂設定 */
+
+sounds.home.loop=true;
+sounds.game.loop=true;
+
+
+/* 音量設定 */
+
+sounds.home.volume=.65;
+sounds.game.volume=.65;
+
+
+/* 音效音量 */
+
+sounds.punch1.volume=1;
+sounds.punch2.volume=1;
+sounds.punch3.volume=1;
+sounds.over.volume=1;
+sounds.flyover.volume=1;
+
+
+/* 音效播放狀態 */
+
+let homeMusicStarted=false;
+
+
+/* 播放音效 */
+
+function playSound(audio){
+
+if(!audio)return;
+
+try{
+
+audio.currentTime=0;
+
+const result=audio.play();
+
+if(result&&typeof result.catch==='function'){
+result.catch(()=>{});
+}
+
+}catch(e){}
+
+}
+
+
+/* 停止音效 */
+
+function stopSound(audio){
+
+if(!audio)return;
+
+try{
+
+audio.pause();
+audio.currentTime=0;
+
+}catch(e){}
+
+}
+
+
+/* 停止所有音效 */
+
+function stopAllSounds(){
+
+Object.values(sounds).forEach(audio=>{
+stopSound(audio);
+});
+
+}
+
+
+/* 播放首頁音樂 */
+
+function playHomeMusic(){
+
+if(playing)return;
+
+stopSound(sounds.game);
+
+playSound(sounds.home);
+
+homeMusicStarted=true;
+
+}
+
+
+/* 播放遊戲音樂 */
+
+function playGameMusic(){
+
+stopSound(sounds.home);
+
+playSound(sounds.game);
+
+}
+
+
+/* iPhone Safari 自動播放限制處理 */
+
+function enableAudioAfterInteraction(){
+
+if(playing)return;
+
+if(!homeMusicStarted){
+
+playHomeMusic();
+
+}
+
+}
+
+document.addEventListener('pointerdown',enableAudioAfterInteraction,{once:true});
+
+document.addEventListener('touchstart',enableAudioAfterInteraction,{once:true});
+
+
+/* =========================================
+   遊戲設定
 ========================================= */
 
 const BEST_KEY='maimine_roach_killer_best_v1';
@@ -148,32 +534,53 @@ let time=20;
 let best=Number(localStorage.getItem(BEST_KEY)||0);
 
 let playing=false;
+
 let timer=null;
 let spawnTimer=null;
+
 let spawnCount=0;
+
 let mineAt=0;
 let mineSpawned=false;
 
+let ending=false;
+
 const rand=(a,b)=>a+Math.random()*(b-a);
 
-/* 最高紀錄 */
+
+/* =========================================
+   最高紀錄
+========================================= */
 
 $('#record').addEventListener('click',()=>{
+
 alert('最高紀錄：'+best+' 隻');
+
 });
 
-/* 開始遊戲 */
+
+/* =========================================
+   開始遊戲
+========================================= */
 
 $('#start').addEventListener('click',start);
+
 $('#again').addEventListener('click',start);
+
 
 function start(){
 
 clearAll();
 
+stopSound(sounds.home);
+stopSound(sounds.over);
+stopSound(sounds.flyover);
+
 score=0;
 time=20;
+
 playing=true;
+ending=false;
 
 spawnCount=0;
 mineSpawned=false;
@@ -187,32 +594,60 @@ $('#best').textContent=best;
 bugs.innerHTML='';
 
 overlay.style.display='none';
+
 cover.style.display='none';
+
 game.style.display='block';
 
 arm.style.transform='';
-fly.style.style='';
+
+fly.style.transform='';
 fly.style.display='none';
+
+
+/* 遊戲開始音樂 */
+
+playGameMusic();
+
+
+/* 生成第一隻蟑螂 */
 
 spawn();
 
+
+/* 定時生成蟑螂 */
+
 spawnTimer=setInterval(spawn,760);
 
+
+/* 倒數 */
+
 timer=setInterval(()=>{
+
+if(!playing)return;
 
 time--;
 
 $('#time').textContent=time;
 
 if(time<=0){
+
+time=0;
+
+$('#time').textContent='0';
+
 end(false);
+
 }
 
 },1000);
 
 }
 
-/* 清除計時器 */
+
+/* =========================================
+   清除計時器
+========================================= */
 
 function clearAll(){
 
@@ -224,7 +659,10 @@ spawnTimer=null;
 
 }
 
-/* 生成蟑螂 */
+
+/* =========================================
+   生成蟑螂
+========================================= */
 
 function spawn(){
 
@@ -286,7 +724,10 @@ wander(el);
 
 }
 
-/* 蟑螂移動 */
+
+/* =========================================
+   蟑螂移動
+========================================= */
 
 function wander(el){
 
@@ -313,13 +754,19 @@ el.style.rotate=rand(-30,30)+'deg';
 
 }
 
-/* 點擊蟑螂 */
+
+/* =========================================
+   點擊蟑螂
+========================================= */
 
 function hit(el,e){
 
 if(!playing||el.classList.contains('dead'))return;
 
-/* 飛蟑螂 */
+
+/* =========================================
+   飛蟑螂結局
+========================================= */
 
 if(el.dataset.mine==='1'){
 
@@ -335,13 +782,23 @@ fly.style.top=(parseFloat(el.style.top)+el.offsetHeight/2)+'px';
 
 toast('糟了！牠會飛！');
 
-setTimeout(()=>end(true),420);
+
+/* 延遲結束，讓飛蟑螂動畫顯示 */
+
+setTimeout(()=>{
+
+end(true);
+
+},420);
 
 return;
 
 }
 
-/* 拖鞋動畫 */
+
+/* =========================================
+   拖鞋動畫
+========================================= */
 
 arm.classList.remove('swing');
 
@@ -351,13 +808,19 @@ arm.classList.add('swing');
 
 setTimeout(()=>arm.classList.remove('swing'),145);
 
-/* 畫面閃光 */
+
+/* =========================================
+   畫面閃光
+========================================= */
 
 flash.style.opacity='.28';
 
 setTimeout(()=>flash.style.opacity='0',55);
 
-/* 蟑螂受擊 */
+
+/* =========================================
+   蟑螂受擊
+========================================= */
 
 let hits=Number(el.dataset.hit)+1;
 
@@ -367,13 +830,25 @@ el.classList.remove('shake','blood');
 
 void el.offsetWidth;
 
+
+/* =========================================
+   第一擊
+========================================= */
+
 if(hits===1){
 
 el.src='images/reaction1.png';
 
 el.classList.add('shake');
 
+playSound(sounds.punch1);
+
 toast('啪！再補一下！');
+
+
+/* =========================================
+   第二擊
+========================================= */
 
 }else if(hits===2){
 
@@ -381,7 +856,14 @@ el.src='images/reaction2.png';
 
 el.classList.add('blood');
 
+playSound(sounds.punch2);
+
 toast('受傷了！再一下！');
+
+
+/* =========================================
+   第三擊
+========================================= */
 
 }else{
 
@@ -389,9 +871,12 @@ el.src='images/reaction3.png';
 
 el.classList.add('dead');
 
+playSound(sounds.punch3);
+
 score++;
 
 $('#score').textContent=score;
+
 
 /* 更新最高紀錄 */
 
@@ -411,7 +896,10 @@ setTimeout(()=>el.remove(),470);
 
 }
 
-/* 提示文字 */
+
+/* =========================================
+   提示文字
+========================================= */
 
 function toast(s){
 
@@ -427,17 +915,30 @@ t.classList.add('show');
 
 }
 
-/* 遊戲結束 */
+
+/* =========================================
+   遊戲結束
+========================================= */
 
 function end(flew){
 
-if(!playing)return;
+if(!playing||ending)return;
 
 playing=false;
+ending=true;
 
 clearAll();
 
+
+/* 停止遊戲背景音樂 */
+
+stopSound(sounds.game);
+
+
+/* 隱藏飛蟑螂 */
+
 fly.style.display='none';
+
 
 /* 更新最高紀錄 */
 
@@ -448,6 +949,22 @@ best=score;
 localStorage.setItem(BEST_KEY,score);
 
 }
+
+
+/* 結局音效 */
+
+if(flew){
+
+playSound(sounds.flyover);
+
+}else{
+
+playSound(sounds.over);
+
+}
+
+
+/* 顯示結果 */
 
 $('#resultTitle').textContent=flew
 ?'OMG 有飛蟑螂！'
@@ -460,6 +977,14 @@ $('#best').textContent=best;
 overlay.style.display='flex';
 
 }
+
+
+/* =========================================
+   首頁音樂啟動
+========================================= */
+
+playHomeMusic();
+
 
 </script>
 
